@@ -1,2 +1,7 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿Console.ReadKey();
+
+public interface ILinkedList<T> : ICollection<T>
+{
+    void AddToFront(T item);
+    void AddToEnd(T item);
+}
