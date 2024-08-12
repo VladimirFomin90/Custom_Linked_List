@@ -6,6 +6,10 @@ list.Add("x");
 list.Add("y");
 list.Add("z");
 
+foreach (var item in list)
+{
+    Console.WriteLine(item);
+}
 
 Console.ReadKey();
 
@@ -65,12 +69,30 @@ public class SingleLinkedList<T> : ILinkedList<T?>
 
     public IEnumerator<T?> GetEnumerator()
     {
-        throw new NotImplementedException();
+        foreach (var node in GetNode())
+        {
+            yield return node.Value;
+        }
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        throw new NotImplementedException();
+        return GetEnumerator();
+    }
+
+    private IEnumerable<Node<T>> GetNode()
+    {
+        if (_head is null)
+        {
+            yield break;
+        }
+
+        Node<T> current = _head;
+        while (current is not null)
+        {
+            yield return current;
+            current = current.Next;
+        }
     }
 }
 
