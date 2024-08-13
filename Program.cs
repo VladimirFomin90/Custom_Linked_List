@@ -7,6 +7,7 @@ list.AddToFront("y");
 list.AddToFront("z");
 list.Add("a");
 list.Add("b");
+list.Clear();
 
 foreach (var item in list)
 {
@@ -62,7 +63,16 @@ public class SingleLinkedList<T> : ILinkedList<T?>
 
     public void Clear()
     {
-        throw new NotImplementedException();
+        Node<T>? current = _head;
+        while(current is not null)
+        {
+            Node<T>? buff = current;
+            current = current.Next;
+            buff.Next = null;
+        }
+
+        _head = null;
+        _count = 0;
     }
 
     public bool Contains(T? item)
