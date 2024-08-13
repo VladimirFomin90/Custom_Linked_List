@@ -2,9 +2,11 @@
 
 var list = new SingleLinkedList<string>();
 
-list.Add("x");
-list.Add("y");
-list.Add("z");
+list.AddToFront("x");
+list.AddToFront("y");
+list.AddToFront("z");
+list.Add("a");
+list.Add("b");
 
 foreach (var item in list)
 {
@@ -30,22 +32,32 @@ public class SingleLinkedList<T> : ILinkedList<T?>
 
     public void Add(T? item)
     {
+        AddToEnd(item);
+    }
+
+    public void AddToEnd(T? item)
+    {
+        var newNode = new Node<T>(item);
+        if (_head is null)
+        {
+            _head = newNode;
+        }
+        else
+        {
+            var chain = GetNode().Last();
+            chain.Next = newNode;
+        }
+        ++_count;
+    }
+
+    public void AddToFront(T? item)
+    {
         var newHead = new Node<T>(item)
         {
             Next = _head
         };
         _head = newHead;
         ++_count;
-    }
-
-    public void AddToEnd(T? item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void AddToFront(T? item)
-    {
-        throw new NotImplementedException();
     }
 
     public void Clear()
