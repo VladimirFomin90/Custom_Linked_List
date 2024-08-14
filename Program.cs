@@ -2,12 +2,14 @@
 
 var list = new SingleLinkedList<string>();
 
-list.AddToFront("x");
-list.AddToFront("y");
-list.AddToFront("z");
+list.Add("x");
+list.Add("y");
+list.Add("z");
 list.Add("a");
 list.Add("b");
-list.Clear();
+Console.WriteLine("Contains y? " + list.Contains("y"));
+Console.WriteLine("Contains f? " + list.Contains("f"));
+list.Remove("a");
 
 foreach (var item in list)
 {
@@ -64,7 +66,7 @@ public class SingleLinkedList<T> : ILinkedList<T?>
     public void Clear()
     {
         Node<T>? current = _head;
-        while(current is not null)
+        while (current is not null)
         {
             Node<T>? buff = current;
             current = current.Next;
@@ -77,7 +79,11 @@ public class SingleLinkedList<T> : ILinkedList<T?>
 
     public bool Contains(T? item)
     {
-        throw new NotImplementedException();
+        if (item is null)
+        {
+            return GetNode().Any(node => node.Value is null);
+        }
+        return GetNode().Any(node => item.Equals(node.Value));
     }
 
     public void CopyTo(T?[] array, int arrayIndex)
@@ -86,7 +92,25 @@ public class SingleLinkedList<T> : ILinkedList<T?>
     }
     public bool Remove(T? item)
     {
-        throw new NotImplementedException();
+        Node<T>? predNoteValue = null;
+        foreach (var node in GetNode())
+        {
+            if ((node.Value is null && item is null) || (node.Value is not null && node.Value.Equals(item)))
+            {
+                if (predNoteValue is null)
+                {
+                    _head = node.Next;
+                }
+                else
+                {
+                    predNoteValue.Next = node.Next;
+                }
+                --_count;
+                return true;
+            }
+            predNoteValue = node;
+        }
+        return false;
     }
 
     public IEnumerator<T?> GetEnumerator()
