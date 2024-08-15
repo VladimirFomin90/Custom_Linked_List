@@ -2,14 +2,11 @@
 
 var list = new SingleLinkedList<string>();
 
-list.Add("x");
-list.Add("y");
-list.Add("z");
-list.Add("a");
-list.Add("b");
-Console.WriteLine("Contains y? " + list.Contains("y"));
-Console.WriteLine("Contains f? " + list.Contains("f"));
-list.Remove("a");
+list.AddToFront("x");
+list.AddToFront("y");
+list.AddToFront("z");
+var arr = new string[15];
+list.CopyTo(arr, 12);
 
 foreach (var item in list)
 {
@@ -88,7 +85,24 @@ public class SingleLinkedList<T> : ILinkedList<T?>
 
     public void CopyTo(T?[] array, int arrayIndex)
     {
-        throw new NotImplementedException();
+
+        if (array is null)
+        {
+            throw new ArgumentException(nameof(array));
+        }
+        if (arrayIndex < 0 || arrayIndex >= array.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+        }
+        if (array.Length < _count + arrayIndex)
+        {
+            throw new ArithmeticException("The array is not long enough");
+        }
+        foreach (var node in GetNode())
+        {
+            array[arrayIndex] = node.Value;
+            ++arrayIndex;
+        }
     }
     public bool Remove(T? item)
     {
@@ -128,11 +142,6 @@ public class SingleLinkedList<T> : ILinkedList<T?>
 
     private IEnumerable<Node<T>> GetNode()
     {
-        if (_head is null)
-        {
-            yield break;
-        }
-
         Node<T> current = _head;
         while (current is not null)
         {
@@ -144,7 +153,7 @@ public class SingleLinkedList<T> : ILinkedList<T?>
 
 public class Node<T>
 {
-    public T? Value { get; set; }
+    public T? Value { get; }
     public Node<T>? Next { get; set; }
 
     public Node(T? value)
